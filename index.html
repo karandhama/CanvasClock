@@ -1,0 +1,65 @@
+<html>
+<head>
+    <title>Clock</title>
+    <link rel="stylesheet" type="text/css" href="main.css">
+</head>
+<body>
+    <canvas id="myCanvas" width="500" height="300"></canvas>
+    <canvas id="SecondCanvas" width="500" height="300"></canvas>
+    <canvas id="MinuteCanvas" width="500" height="300"></canvas>
+    <canvas id="HourCanvas" width="500" height="300"></canvas>
+    <canvas id="Circle" width="500" height="300"></canvas>
+    <p id="demo"></p>
+    <p id="cords"></p>
+    <script type="text/javascript" src="canvasFunctions.js"></script>
+    <script type="text/javascript">
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+        var degree,MinuteDegree = 0,HourDegree=0;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        //DRAW A OUTER CIRCLE...
+        DrawOuterCircle(canvas,ctx);
+        //DRAW A INNER CIRCLE...
+        DrawInnerCircle(canvas,ctx);
+        //DRAW Digits...
+        var i;
+        for(i=0;i<60;i++) {
+            if(i!=0 || i%5)
+                DrawDigits(canvas,ctx,i*30);
+            DrawDigits1(canvas,ctx,i*6);
+        }
+
+        var canvas1 = document.getElementById("SecondCanvas");
+        var ctx1 = canvas1.getContext("2d");
+        var canvas2 = document.getElementById("MinuteCanvas");
+        var ctx2 = canvas2.getContext("2d");
+        var canvas3 = document.getElementById("HourCanvas");
+        var ctx3 = canvas3.getContext("2d");
+        var canvas4 = document.getElementById("Circle");
+        var ctx4 = canvas4.getContext("2d");
+
+        //DRAW CENTER OF THE CIRCLE...
+        DrawCenterCircle(canvas4,ctx4);
+
+        setInterval(myFunction,1000);
+        function myFunction() {
+            var d = new Date();
+            var seconds = d.getSeconds();
+            document.getElementById("demo").innerHTML = d.toLocaleTimeString();
+            degree = 6*seconds;
+            DrawSecondHand(canvas1,ctx1,degree);
+            degree += 6;
+
+            var minutes = d.getMinutes();
+            MinuteDegree = (0.1)*minutes*60 + (degree*6/360);
+            DrawMinuteHand(canvas2,ctx2,MinuteDegree);
+            MinuteDegree += (0.1);
+
+            var hours = d.getHours();
+            HourDegree = (1/120)*hours*3600 + (MinuteDegree*30/360);
+            DrawHourHand(canvas3,ctx3,HourDegree);
+            HourDegree += (1/120);
+        }
+    </script>
+</body>
+</html>
